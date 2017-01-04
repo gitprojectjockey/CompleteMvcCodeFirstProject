@@ -180,7 +180,20 @@
     <Compile Include="Migrations\201701032320364_initail.Designer.cs">
       <DependentUpon>201701032320364_initail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701040131593_MaxLengthOnNames.cs" />
+    <Compile Include="Migrations\201701040131593_MaxLengthOnNames.Designer.cs">
+      <DependentUpon>201701040131593_MaxLengthOnNames.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701040139446_ColumnFirstName.cs" />
+    <Compile Include="Migrations\201701040139446_ColumnFirstName.Designer.cs">
+      <DependentUpon>201701040139446_ColumnFirstName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201701040153365_AddedNewDataAttrToStudentModel.cs" />
+    <Compile Include="Migrations\201701040153365_AddedNewDataAttrToStudentModel.Designer.cs">
+      <DependentUpon>201701040153365_AddedNewDataAttrToStudentModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Instructor.cs" />
     <Compile Include="ViewModels\EnrollmentDateGroup.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Enrollment.cs" />
@@ -188,6 +201,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\contoso.mdf" />
+    <Content Include="App_Data\contoso_log.ldf" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -246,9 +261,7 @@
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
@@ -261,6 +274,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201701032320364_initail.resx">
       <DependentUpon>201701032320364_initail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701040131593_MaxLengthOnNames.resx">
+      <DependentUpon>201701040131593_MaxLengthOnNames.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701040139446_ColumnFirstName.resx">
+      <DependentUpon>201701040139446_ColumnFirstName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701040153365_AddedNewDataAttrToStudentModel.resx">
+      <DependentUpon>201701040153365_AddedNewDataAttrToStudentModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
