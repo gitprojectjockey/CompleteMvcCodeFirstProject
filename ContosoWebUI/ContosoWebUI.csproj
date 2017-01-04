@@ -192,8 +192,14 @@
     <Compile Include="Migrations\201701040153365_AddedNewDataAttrToStudentModel.Designer.cs">
       <DependentUpon>201701040153365_AddedNewDataAttrToStudentModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701041820348_MoreComplexDataModel.cs" />
+    <Compile Include="Migrations\201701041820348_MoreComplexDataModel.Designer.cs">
+      <DependentUpon>201701041820348_MoreComplexDataModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Instructor.cs" />
+    <Compile Include="Models\OfficeAssignment.cs" />
     <Compile Include="ViewModels\EnrollmentDateGroup.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Enrollment.cs" />
@@ -283,6 +289,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701040153365_AddedNewDataAttrToStudentModel.resx">
       <DependentUpon>201701040153365_AddedNewDataAttrToStudentModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701041820348_MoreComplexDataModel.resx">
+      <DependentUpon>201701041820348_MoreComplexDataModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
