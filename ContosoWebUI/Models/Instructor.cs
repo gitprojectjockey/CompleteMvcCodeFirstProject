@@ -10,11 +10,11 @@ namespace ContosoWebUI.Models
         public int ID { get; set; }
 
         //Multiple Attributes on single line :>
-        [Required,Display(Name = "Last Name"),StringLength(50)]
+        [Required,Display(Name = "Last Name"), StringLength(50)]
         public string LastName { get; set; }
 
         [Required,Column("FirstName")]
-        [Display(Name = "First Name"),StringLength(50)]
+        [Display(Name = "First Name"), StringLength(50)]
         public string FirstMidName { get; set; }
 
         [DataType(DataType.Date),Display(Name = "Hire Date")]
