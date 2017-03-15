@@ -123,11 +123,11 @@
 
 @helper formatOfficeAssignment(string assignment)
 {
-var color = "green";
+var color = "#c8c8c8";
 if (assignment == null)
 {
     assignment = "Not yet assigned.";
-    color = "red";
+    color = "orange";
 }
     <span style="color:@color">@assignment</span>
 }

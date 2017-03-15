@@ -22,3 +22,13 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.fixed-table-size {
+  display:block;
+  max-width: 300px;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+.fixed-table-size td {
+  width: 60%;
+}

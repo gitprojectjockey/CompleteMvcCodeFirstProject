@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "sourceMap": true,
+    "target": "es5",
+    "outDir": "Scripts/MyJavaScripts"
+  },
+  "files": [
+    "TypeScripts/instructor-edit.ts"
+  ],
+  "compileOnSave": true
+}

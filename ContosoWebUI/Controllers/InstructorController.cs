@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using ContosoWebUI.DAL;
 using ContosoWebUI.Models;
 using ContosoWebUI.ViewModels;
+using System.Data.Entity.Infrastructure;
+using System.Collections.Generic;
 
 namespace ContosoWebUI.Controllers
 {
@@ -53,11 +55,14 @@ namespace ContosoWebUI.Controllers
         // GET: Instructor/Details/5
         public ActionResult Details(int? id)
         {
+            //Eager loading office assignment
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructors.Find(id);
+
+            Instructor instructor = db.Instructors.Include(i => i.OfficeAssignment)
+                .Single(i => i.ID == id) as Instructor;
             if (instructor == null)
             {
                 return HttpNotFound();
@@ -93,35 +98,63 @@ namespace ContosoWebUI.Controllers
         // GET: Instructor/Edit/5
         public ActionResult Edit(int? id)
         {
+            //eager load office assignment and courses
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Instructor instructor = db.Instructors.Find(id);
+            Instructor instructor = db.Instructors
+                .Include(i => i.OfficeAssignment)
+                .Include(i => i.Courses)
+                .Where(i => i.ID == id).Single();
+
+            PopulateAssignedCourseData(instructor);
+
             if (instructor == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location", instructor.ID);
+
             return View(instructor);
         }
 
         // POST: Instructor/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,LastName,FirstMidName,HireDate")] Instructor instructor)
+        public ActionResult EditPost([Bind(Include = "ID,LastName,FirstMidName,HireDate")] int? id)
         {
-            if (ModelState.IsValid)
+            if (id == null)
             {
-                db.Entry(instructor).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location", instructor.ID);
-            return View(instructor);
+            var instructorToUpdate = db.Instructors
+                .Include(i => i.OfficeAssignment)
+                .Where(i => i.ID == id)
+                .Single();
+
+            if (TryUpdateModel(instructorToUpdate, new string[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
+            {
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment.Location))
+                    {
+                        instructorToUpdate.OfficeAssignment = null;
+                    }
+                    db.Entry(instructorToUpdate).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
+            return View(instructorToUpdate);
         }
+
 
         // GET: Instructor/Delete/5
         public ActionResult Delete(int? id)
@@ -148,6 +181,25 @@ namespace ContosoWebUI.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
+        private void PopulateAssignedCourseData(Instructor instructor)
+        {
+            var allCourses = db.Courses;
+            var instructorCourses = new HashSet<int>(instructor.Courses.Select(c => c.CourseID));
+            var viewModel = new List<AssignedCourseData>();
+            foreach (var course in allCourses)
+            {
+                viewModel.Add(new AssignedCourseData
+                {
+                    CourseID = course.CourseID,
+                    Title = course.Title,
+                    Assigned = instructorCourses.Contains(course.CourseID)
+                });
+            }
+            ViewBag.Courses = viewModel;
+        }
+
 
         protected override void Dispose(bool disposing)
         {
