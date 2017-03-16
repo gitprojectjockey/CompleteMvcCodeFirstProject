@@ -73,7 +73,9 @@ namespace ContosoWebUI.Controllers
         // GET: Instructor/Create
         public ActionResult Create()
         {
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location");
+            var instructor = new Instructor();
+            instructor.Courses = new List<Course>();
+            PopulateAssignedCourseData(instructor);
             return View();
         }
 
@@ -82,8 +84,18 @@ namespace ContosoWebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,LastName,FirstMidName,HireDate")] Instructor instructor)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,HireDate,OfficeAssignment")] Instructor instructor, string[] selectedCourses)
         {
+            if (selectedCourses != null)
+            {
+                instructor.Courses = new List<Course>();
+                foreach (var course in selectedCourses)
+                {
+                    var courseToAdd = db.Courses.Find(int.Parse(course));
+                    instructor.Courses.Add(courseToAdd);
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 db.Instructors.Add(instructor);
@@ -91,7 +103,7 @@ namespace ContosoWebUI.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ID = new SelectList(db.OfficeAssignments, "InstructorID", "Location", instructor.ID);
+            PopulateAssignedCourseData(instructor);
             return View(instructor);
         }
 
@@ -123,7 +135,7 @@ namespace ContosoWebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost([Bind(Include = "ID,LastName,FirstMidName,HireDate")] int? id)
+        public ActionResult EditPost([Bind(Include = "ID,LastName,FirstMidName,HireDate")] int? id, string[] selectedCourses)
         {
             if (id == null)
             {
@@ -131,6 +143,7 @@ namespace ContosoWebUI.Controllers
             }
             var instructorToUpdate = db.Instructors
                 .Include(i => i.OfficeAssignment)
+                .Include(i => i.Courses)
                 .Where(i => i.ID == id)
                 .Single();
 
@@ -142,6 +155,7 @@ namespace ContosoWebUI.Controllers
                     {
                         instructorToUpdate.OfficeAssignment = null;
                     }
+                    UpdateIstructorAssignedCourses(selectedCourses, instructorToUpdate);
                     db.Entry(instructorToUpdate).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -151,7 +165,9 @@ namespace ContosoWebUI.Controllers
                     //Log the error (uncomment dex variable name and add a line here to write a log.
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
+
             }
+            PopulateAssignedCourseData(instructorToUpdate);
             return View(instructorToUpdate);
         }
 
@@ -176,8 +192,23 @@ namespace ContosoWebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Instructor instructor = db.Instructors.Find(id);
+            Instructor instructor = db.Instructors
+                .Include(i => i.OfficeAssignment)
+                .Where(i => i.ID == id)
+                .Single();
+
+            instructor.OfficeAssignment = null;
             db.Instructors.Remove(instructor);
+
+            var department = db.Departments
+                .Where(d => d.InstructorID == id)
+                .SingleOrDefault();
+
+            if (department != null)
+            {
+                department.InstructorID = null;
+            }
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -200,6 +231,42 @@ namespace ContosoWebUI.Controllers
             ViewBag.Courses = viewModel;
         }
 
+        //The code then loops through all courses in the database and checks each course against the ones currently assigned to 
+        //the instructor versus the ones that were selected in the view.To facilitate efficient lookups, the latter two collections 
+        //are stored in HashSet objects.
+
+        //If the check box for a course was selected but the course isn't in the Instructor.Courses navigation property, the course 
+        //is added to the collection in the navigation property.
+
+        //If the check box for a course wasn't selected, but the course is in the Instructor.Courses navigation property, 
+        //the course is removed from the navigation property.
+        private void UpdateIstructorAssignedCourses(string[] selectedCourses, Instructor instructorToUpdate)
+        {
+            if (selectedCourses == null)
+            {
+                instructorToUpdate.Courses = new List<Course>();
+                return;
+            }
+            var selectedCoursesHash = new HashSet<string>(selectedCourses);
+            var instructorCoursesHash = new HashSet<int>(instructorToUpdate.Courses.Select(c => c.CourseID));
+            foreach (var course in db.Courses)
+            {
+                if (selectedCoursesHash.Contains(course.CourseID.ToString()))
+                {
+                    if (!instructorCoursesHash.Contains(course.CourseID))
+                    {
+                        instructorToUpdate.Courses.Add(course);
+                    }
+                }
+                else
+                {
+                    if (instructorCoursesHash.Contains(course.CourseID))
+                    {
+                        instructorToUpdate.Courses.Remove(course);
+                    }
+                }
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {

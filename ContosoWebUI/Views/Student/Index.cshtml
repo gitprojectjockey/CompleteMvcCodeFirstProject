@@ -12,7 +12,7 @@
 <h2>Students</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
 </p>
 
 @*Search value submit*@
@@ -21,10 +21,11 @@
     the URL. The W3C guidelines for the use of HTTP GET recommend that you should use GET when the action does not result in an update.*@
 @using (Html.BeginForm("Index", "Student", FormMethod.Get))
 {
-    <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    <div class="form-group form-inline">
+        <h5>Find by name:</h5>
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new {@class="form-control", placeholder = "Search Value" })
+        <input type="submit" value="Search" , class="btn btn-default form-control" />
+    </div>
 }
 
 
@@ -56,9 +57,9 @@
                 @Html.DisplayFor(modelItem => item.EnrollmentDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Edit", "Edit", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Details","Details", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Delete", "Delete", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
             </td>
         </tr>
     }

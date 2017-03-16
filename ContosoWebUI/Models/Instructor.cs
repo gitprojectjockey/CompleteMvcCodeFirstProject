@@ -18,7 +18,7 @@ namespace ContosoWebUI.Models
         [Display(Name = "First Name"), StringLength(50)]
         public string FirstMidName { get; set; }
 
-        [DataType(DataType.Date),Display(Name = "Hire Date")]
+        [DataType(DataType.Date), Display(Name = "Hire Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime HireDate { get; set; }
 

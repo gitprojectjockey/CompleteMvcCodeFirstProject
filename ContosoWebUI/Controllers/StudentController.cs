@@ -7,6 +7,7 @@ using ContosoWebUI.DAL;
 using ContosoWebUI.Models;
 using PagedList;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
 
 
 namespace ContosoWebUI.Controllers
@@ -82,7 +83,12 @@ namespace ContosoWebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+
+            Student student = db.Students
+                    .Include(s => s.Enrollments)
+                    .Include(s => s.Enrollments.Select(e => e.Course))
+                    .Single(s => s.ID == id) as Student;
+
             if (student == null)
             {
                 return HttpNotFound();

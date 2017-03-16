@@ -7,7 +7,7 @@
     "outDir": "Scripts/MyJavaScripts"
   },
   "files": [
-    "TypeScripts/instructor-edit.ts"
+    "TypeScripts/instructor-create-edit.ts"
   ],
   "compileOnSave": true
 }

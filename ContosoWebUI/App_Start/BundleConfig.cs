@@ -27,7 +27,7 @@ namespace ContosoWebUI
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/myjavascripts").Include(
-                      "~/Scripts/MyJavaScripts/instructor-edit.js",
+                      "~/Scripts/MyJavaScripts/instructor-create-edit.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

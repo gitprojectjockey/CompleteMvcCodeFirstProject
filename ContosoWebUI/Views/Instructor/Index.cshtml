@@ -7,7 +7,7 @@
 <h2>Instructors</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create",null,null,new {@class="btn btn-default" })
 </p>
 <table class="table">
     <tr>
@@ -52,10 +52,10 @@
 
             </td>
             <td>
-                @Html.ActionLink("Select", "Index", new { id = item.ID }) |
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                @Html.ActionLink("Select", "Index",null, new { id = item.ID }, new {@class= "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Edit", "Edit", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Details", "Details", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Delete", "Delete", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
             </td>
         </tr>
     }
@@ -67,10 +67,10 @@
     <h3>Courses Taught by Selected Instructor</h3>
     <table class="table">
         <tr>
-            <th></th>
             <th>Number</th>
             <th>Title</th>
             <th>Department</th>
+            <th></th>
         </tr>
         @foreach (var item in Model.Courses)
         {
@@ -81,9 +81,6 @@
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.ActionLink("Select", "Index", new { courseID = item.CourseID })
-                </td>
-                <td>
                     @item.CourseID
                 </td>
                 <td>
@@ -91,6 +88,9 @@
                 </td>
                 <td>
                     @item.Department.Name
+                </td>
+                <td>
+                    @Html.ActionLink("Select", "Index",null, new { courseID = item.CourseID }, new { @class = "btn btn-default btn-xs" })
                 </td>
             </tr>
         }

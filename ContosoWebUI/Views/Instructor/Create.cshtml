@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Instructor</h4>
         <hr />
@@ -38,19 +38,49 @@
                 @Html.ValidationMessageFor(model => model.HireDate, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            @Html.LabelFor(model => model.OfficeAssignment.Location, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OfficeAssignment.Location, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OfficeAssignment.Location)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2">
+                Courses
+                <br />
+                <div id="selectedCourseList" class="col-md-8 pull-right">
+                </div>
+                <table class="table fixed-table-size course" id="tblCourse">
+                    <tr>
+                        <th>Selected</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                    </tr>
+                    @foreach (var course in ViewBag.Courses)
+                    {
+                        <tr>
+                            <td>
+                                @*The check boxes all have the same name ("selectedCourses"), which informs the
+                                model binder that they are to be treated as a group. The value attribute of each
+                                check box is set to the value of CourseID. When the page is posted, the model binder
+                                passes an array to the controller that consists of the CourseID values for only the check boxes which are selected.*@
+                                <input type="checkbox" name="selectedCourses" , id="@course.CourseID" value=@course.CourseID @(Convert.ToBoolean(course.Assigned) == true ? "checked='checked'" : string.Empty) />
+                            </td>
+                            <td>@course.CourseID</td>
+                            <td>@course.Title</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" id="btnInstructor-Create-Save" class="btn btn-default" />
+                    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+                </div>
             </div>
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <div id="AB7BEE7D-141F-4C23-915A-A4EDD8346790" />
 }

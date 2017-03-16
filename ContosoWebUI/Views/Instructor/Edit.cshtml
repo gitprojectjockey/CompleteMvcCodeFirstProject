@@ -60,14 +60,18 @@
                         <th>ID</th>
                         <th>Name</th>
                     </tr>
-                    @foreach (var acd in ViewBag.Courses)
+                    @foreach (var course in ViewBag.Courses)
                     {
                         <tr>
                             <td>
-                                <input @(Convert.ToBoolean(acd.Assigned) == true ? "checked='checked'" : string.Empty) type="checkbox" />
+                                @*The check boxes all have the same name ("selectedCourses"), which informs the
+                                  model binder that they are to be treated as a group. The value attribute of each
+                                  check box is set to the value of CourseID. When the page is posted, the model binder
+                                  passes an array to the controller that consists of the CourseID values for only the check boxes which are selected.*@
+                                <input type="checkbox" name="selectedCourses" , id="@course.CourseID" value=@course.CourseID @(Convert.ToBoolean(course.Assigned) == true ? "checked='checked'" : string.Empty) />
                             </td>
-                            <td>@acd.CourseID</td>
-                            <td>@acd.Title</td>
+                            <td>@course.CourseID</td>
+                            <td>@course.Title</td>
                         </tr>
                     }
                 </table>
@@ -75,11 +79,11 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+                    <input type="submit" value="Save" class="btn btn-default" id="btnInstructor-Edit-Save" />
                     @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
                 </div>
             </div>
-            <div id="0929AA6C-6367-414E-87FD-F89151019A7B"></div>
+            <div id="0929AA6C-6367-414E-87FD-F89151019A7B"/>
         </div>
     </div>
 }
