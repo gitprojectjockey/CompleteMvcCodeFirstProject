@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ContosoWebUI.Models
 {
@@ -6,6 +7,8 @@ namespace ContosoWebUI.Models
     {
         A, B, C, D, F
     }
+
+    [ModelBinder(typeof(CustomBinders.TrimModelBinder))]
     public class Enrollment
     {
         [Key]

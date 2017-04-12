@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace ContosoWebUI.Models
 {
+    [ModelBinder(typeof(CustomBinders.TrimModelBinder))]
     public class Course
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -12,7 +14,7 @@ namespace ContosoWebUI.Models
 
         [StringLength(50, MinimumLength = 3)]
         public string Title { get; set; }
-
+        
         [Range(0, 5)]
         public int Credits { get; set; }
 

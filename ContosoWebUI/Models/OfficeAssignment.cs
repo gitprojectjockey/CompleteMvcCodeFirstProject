@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace ContosoWebUI.Models
 {
+    [ModelBinder(typeof(CustomBinders.TrimModelBinder))]
     public class OfficeAssignment
     {
         [Key]

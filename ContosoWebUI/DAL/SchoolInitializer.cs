@@ -11,6 +11,8 @@ namespace ContosoWebUI.DAL
     //As an alternative to setting the initializer in the Web.config file is to do it in code by adding a 
     //Database.SetInitializer statement to the Application_Start method in the Global.asax.cs file.
 
+    //
+
     //<contexts>
     //  <context type = "Contoso.DAL.SchoolContext, ContosoWebUI" >
     //    < databaseInitializer type="Contoso.DAL.SchoolInitializer, ContosoWebUI" />

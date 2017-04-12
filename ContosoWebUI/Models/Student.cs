@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace ContosoWebUI.Models
 {
+    [ModelBinder(typeof(CustomBinders.TrimModelBinder))]
     public class Student
     {
         [Key]
@@ -19,7 +21,7 @@ namespace ContosoWebUI.Models
 
         //Regular expression requires the first character to be upper case and the remaining characters to be alphabetical
         [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$", ErrorMessage = "First name must be alphabetical and first letter must be uppercase")]
-        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
+        [StringLength(50, MinimumLength = 3)]
         [Display(Name = "First Name")]
         [Column("FirstName")]
         public string FirstMidName { get; set; }

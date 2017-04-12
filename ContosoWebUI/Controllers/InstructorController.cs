@@ -31,7 +31,7 @@ namespace ContosoWebUI.Controllers
             }
             if (courseID != null)
             {
-                ViewBag.CourseID = courseID.Value;
+                ViewData["Instructor.Courses.SelectedCourseID"] = courseID.Value;
 
                 //Lazy loading...
                 //viewModel.Enrollments = viewModel.Courses.Where(
@@ -71,6 +71,7 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Instructor/Create
+        [HttpGet]
         public ActionResult Create()
         {
             var instructor = new Instructor();
@@ -84,7 +85,7 @@ namespace ContosoWebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,HireDate,OfficeAssignment")] Instructor instructor, string[] selectedCourses)
+        public ActionResult Create([Bind(Include = "LastName,FirstName,HireDate,OfficeAssignment")] Instructor instructor, string[] selectedCourses)
         {
             if (selectedCourses != null)
             {
@@ -108,6 +109,7 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Instructor/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             //eager load office assignment and courses
@@ -135,7 +137,9 @@ namespace ContosoWebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost([Bind(Include = "ID,LastName,FirstMidName,HireDate")] int? id, string[] selectedCourses)
+        
+        
+        public ActionResult EditPost([Bind(Include = "ID,LastName,FirstName,HireDate")]int? id, string[] selectedCourses)
         {
             if (id == null)
             {
@@ -146,8 +150,8 @@ namespace ContosoWebUI.Controllers
                 .Include(i => i.Courses)
                 .Where(i => i.ID == id)
                 .Single();
-
-            if (TryUpdateModel(instructorToUpdate, new string[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
+         
+            if (TryUpdateModel(instructorToUpdate, new string[] { "LastName", "FirstName", "HireDate", "OfficeAssignment" }))
             {
                 try
                 {
@@ -228,7 +232,7 @@ namespace ContosoWebUI.Controllers
                     Assigned = instructorCourses.Contains(course.CourseID)
                 });
             }
-            ViewBag.Courses = viewModel;
+            ViewData["Instructor.ViewModel.AssignedCourseData"] = viewModel;
         }
 
         //The code then loops through all courses in the database and checks each course against the ones currently assigned to 

@@ -32,3 +32,7 @@ textarea {
 .fixed-table-size td {
   width: 60%;
 }
+
+.selected-table-row{
+  color: coral;
+}

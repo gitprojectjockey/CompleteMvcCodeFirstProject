@@ -1,11 +1,12 @@
-﻿using ContosoWebUI.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace ContosoWebUI.Models
 {
+    [ModelBinder(typeof(CustomBinders.TrimModelBinder))]
     public class Instructor
     {
         public int ID { get; set; }
@@ -14,9 +15,11 @@ namespace ContosoWebUI.Models
         [Required,Display(Name = "Last Name"), StringLength(50)]
         public string LastName { get; set; }
 
-        [Required,Column("FirstName")]
-        [Display(Name = "First Name"), StringLength(50)]
-        public string FirstMidName { get; set; }
+       
+        [Column("FirstName")]
+        [Display(Name = "First Name")]
+        [StringLength(50, MinimumLength = 2)]
+        public string FirstName { get; set; }
 
         [DataType(DataType.Date), Display(Name = "Hire Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -25,7 +28,7 @@ namespace ContosoWebUI.Models
         [Display(Name = "Full Name")]
         public string FullName
         {
-            get { return LastName + ", " + FirstMidName; }
+            get { return LastName + ", " + FirstName; }
         }
 
         public virtual ICollection<Course> Courses { get; set; }

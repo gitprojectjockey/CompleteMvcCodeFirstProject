@@ -13,7 +13,10 @@ namespace ContosoWebUI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+           // ModelBinders.Binders.Add(typeof(CustomBinders.TrimModelBinder), new CustomBinders.TrimModelBinder());
+            ModelBinders.Binders.Add(typeof(CustomBinders.TrimModelBinder), new CustomBinders.TrimModelBinder());
 
+            //YYZ
             //--------------------------------------------------------------------------------------------------
             //These lines of code are what causes your interceptor code to be run when Entity Framework sends queries 
             //to the database.Notice that because you created separate interceptor classes for transient error 

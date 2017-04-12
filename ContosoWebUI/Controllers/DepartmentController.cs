@@ -12,6 +12,7 @@ namespace ContosoWebUI.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Department
+        [HttpGet]
         public async Task<ActionResult> Index()
         {
             var departments = db.Departments.Include(d => d.Administrator);
@@ -19,13 +20,14 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Department/Details/5
+        [HttpGet]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            var department = await db.Departments.FindAsync(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -34,6 +36,7 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Department/Create
+        [HttpGet]
         public ActionResult Create()
         {
             ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "LastName");
@@ -59,6 +62,7 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Department/Edit/5
+        [HttpGet]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,7 +83,7 @@ namespace ContosoWebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "DepartmentID,Name,Budget,StartDate,InstructorID")] Department department)
+        public async Task<ActionResult> Edit(Department department)
         {
             if (ModelState.IsValid)
             {
@@ -92,6 +96,7 @@ namespace ContosoWebUI.Controllers
         }
 
         // GET: Department/Delete/5
+        [HttpGet]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)

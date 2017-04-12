@@ -1,5 +1,4 @@
 ﻿@model ContosoWebUI.ViewModels.InstructorIndexData
-
 @{
     ViewBag.Title = "Instructors";
 }
@@ -7,7 +6,7 @@
 <h2>Instructors</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create",null,null,new {@class="btn btn-default" })
+    @Html.ActionLink("Create New", "Create", null, null, new { @class = "btn btn-default" })
 </p>
 <table class="table">
     <tr>
@@ -28,14 +27,17 @@
 
     @foreach (var item in Model.Instructors)
     {
-        string selectedRow = "";
-        if (item.ID == ViewBag.InstructorID) { selectedRow = "success"; }
-        <tr class="@selectedRow">
+        string selectedRowCSS = "";
+        if (item.ID == ViewBag.InstructorID)
+        {
+            selectedRowCSS = "selected-table-row";
+        }
+        <tr class="@selectedRowCSS">
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstMidName)
+                @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.HireDate)
@@ -49,10 +51,9 @@
                 {
                     @formatOfficeAssignment(null);
                 }
-
             </td>
             <td>
-                @Html.ActionLink("Select", "Index",null, new { id = item.ID }, new {@class= "btn btn-default btn-xs" }) |
+                @Html.ActionLink("Select", "Index", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
                 @Html.ActionLink("Edit", "Edit", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
                 @Html.ActionLink("Details", "Details", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" }) |
                 @Html.ActionLink("Delete", "Delete", null, new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
@@ -63,7 +64,6 @@
 
 @if (Model.Courses != null)
 {
-
     <h3>Courses Taught by Selected Instructor</h3>
     <table class="table">
         <tr>
@@ -74,12 +74,13 @@
         </tr>
         @foreach (var item in Model.Courses)
         {
-            string selectedRow = "";
-            if (item.CourseID == ViewBag.CourseID)
+            string selectedRowCSS = "";
+            if (ViewData["Instructor.Courses.SelectedCourseID"] != null &&
+                item.CourseID == (int)ViewData["Instructor.Courses.SelectedCourseID"])
             {
-                selectedRow = "success";
+                selectedRowCSS = "selected-table-row";
             }
-            <tr class="@selectedRow">
+            <tr class="@selectedRowCSS">
                 <td>
                     @item.CourseID
                 </td>
@@ -90,7 +91,7 @@
                     @item.Department.Name
                 </td>
                 <td>
-                    @Html.ActionLink("Select", "Index",null, new { courseID = item.CourseID }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Select", "Index", null, new { courseID = item.CourseID }, new { @class = "btn btn-default btn-xs" })
                 </td>
             </tr>
         }
@@ -123,11 +124,11 @@
 
 @helper formatOfficeAssignment(string assignment)
 {
-var color = "#c8c8c8";
-if (assignment == null)
-{
-    assignment = "Not yet assigned.";
-    color = "orange";
-}
+    var color = "";
+    if (assignment == null)
+    {
+        assignment = "Not yet assigned.";
+        color = "limegreen";
+    }
     <span style="color:@color">@assignment</span>
 }
