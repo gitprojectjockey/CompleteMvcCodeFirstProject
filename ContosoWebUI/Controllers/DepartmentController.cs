@@ -27,7 +27,11 @@ namespace ContosoWebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var department = await db.Departments.FindAsync(id);
+
+            var department = await db.Departments
+                .Include(d => d.Administrator)
+                .SingleAsync(d => d.DepartmentID == id);
+
             if (department == null)
             {
                 return HttpNotFound();

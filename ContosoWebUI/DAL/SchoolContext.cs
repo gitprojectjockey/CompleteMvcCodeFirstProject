@@ -36,6 +36,9 @@ namespace ContosoWebUI.DAL
                 .MapRightKey("InstructorID")
                 .ToTable("CourseInstructor"));
 
+            //This will create CRUD Stored Procedures from the department entitiy
+            modelBuilder.Entity<Department>().MapToStoredProcedures();
+
         }
     }
 }

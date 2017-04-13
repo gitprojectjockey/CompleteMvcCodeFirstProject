@@ -216,5 +216,3 @@ namespace ContosoWebUI.Migrations
         }
     }
 }
-
-
